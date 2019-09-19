@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { User } from '@app/_models';
+import { User, Role } from '@app/_models';
 import { UserService, AuthenticationService } from '@app/_services';
 
 @Component({
@@ -30,6 +30,13 @@ export class UserComponent implements OnInit {
       password: ['', Validators.required]
     });
 
+    this.reloadData();
+  }
+
+  // convenience getter for easy access to form fields in html
+  get f() { return this.userForm.controls; }
+
+  reloadData() {
     this.loading = true;
     this.userService.getAll().pipe(first()).subscribe(users => {
         this.loading = false;
@@ -37,12 +44,8 @@ export class UserComponent implements OnInit {
     });
   }
 
-  // convenience getter for easy access to form fields
-  get f() { return this.userForm.controls; }
-
   onSubmit() {
     this.submitted = true;
-    
     if (this.userForm.invalid) {
         return;
     }
@@ -50,15 +53,19 @@ export class UserComponent implements OnInit {
     this.loading = true;
 
     // test
-    this.user.role = 'Developer';
+    this.user.role = new Role();
+    this.user.role.id = 'ck0oou39u002g0844uesg0ov4';
     this.user.status = 'Pending';
 
     this.userService.save(this.user)
       .pipe(first())
       .subscribe(
         data => {
-          console.log(data);
-            // this.router.navigate([this.returnUrl]);
+          // console.log(data);
+          this.userForm.reset();
+          this.loading = false;
+
+          this.reloadData();
         },
         error => {
           this.error = error;

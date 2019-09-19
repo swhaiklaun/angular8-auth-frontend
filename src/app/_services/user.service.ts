@@ -14,9 +14,9 @@ export class UserService {
     }
 
     save(user: User) {
-        console.log(user);
         return this.http.post<any>(`${environment.apiUrl}/user`, { user })
             .pipe(map(user => {
+                // console.log(user);
                 return user;
             }));
     }
