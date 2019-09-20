@@ -13,11 +13,28 @@ export class UserService {
         return this.http.get<User[]>(`${environment.apiUrl}/user`);
     }
 
-    save(user: User) {
-        return this.http.post<any>(`${environment.apiUrl}/user`, { user })
-            .pipe(map(user => {
-                // console.log(user);
-                return user;
+    getById(id) {
+        return this.http.get<User>(`${environment.apiUrl}/user/` + id);
+    }
+
+    create(user: User) {
+        return this.http.post<User>(`${environment.apiUrl}/user`, { user })
+            .pipe(map(data => {
+                return data;
             }));
+    }
+
+    update(user: User) {
+        return this.http.put<User>(`${environment.apiUrl}/user`, { user })
+        .pipe(map(data => {
+            return data;
+        }));
+    }
+
+    delete(user: User) {
+        return this.http.delete<User>(`${environment.apiUrl}/user/` + user.id)
+        .pipe(map(data => {
+            return data;
+        }));
     }
 }
